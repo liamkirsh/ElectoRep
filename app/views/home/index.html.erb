@@ -4,3 +4,14 @@
 <title>RandTech Hackathon</title>
 </head>
 <body>
+<%= form_for :"Zip Code" do |f| %>
+  <p>
+    <%= f.label :"Enter Zip Code:" %><br>
+    <%= f.text_field :zip %>
+  </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+</body>
