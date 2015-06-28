@@ -46,3 +46,6 @@ end
 
 # Nokogiri
 gem 'nokogiri'
+
+# Figaro
+gem 'figaro'
