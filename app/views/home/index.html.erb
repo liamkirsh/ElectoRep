@@ -68,6 +68,9 @@
                         //+ '<br><br>';
                 }
                 $("#rep_contact").html(myText);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
             }
           });
       });
