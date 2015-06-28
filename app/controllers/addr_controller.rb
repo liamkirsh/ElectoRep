@@ -3,7 +3,7 @@ class AddrController < ApplicationController
     
 	def submit
 		puts params[:address]
-        @address = params[:address]
+        address = params[:address]
         url = "https://www.googleapis.com/civicinfo/v2/representatives?address=" + @address + "&includeOffices=true&levels=country&roles=legislatorLowerBody&roles=legislatorUpperBody&fields=normalizedInput%2Cofficials&key=" + ENV["google_dev_key"]
         url = url.gsub(' ', '+')
         doc = Nokogiri::HTML(open(url))

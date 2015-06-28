@@ -21,19 +21,22 @@
   Address:<br>
   <input id="address" type="text" name="Address" value="">
   <br>
-  <input id="addr_submit" type="submit" value="Submit"><!-- onclick="addr_clicked()">-->
+  <input id="addr_submit" type="submit" value="Submit">
   
   <div id="rep_contact"></div>
 
   <script type="text/javascript">
     
-    /*function get_reps() {
-        console.log("here are your reps");
-        ($.ajax({
-            url: "/GetReps",
-            type: "get"
-        $('#rep_contact").text)
-    }*/
+    function get_stances(name, issue) {
+        console.log('getting stances');
+        $.ajax({
+            url: ("/GetStance/?rep=" + name + "&issue=" + issue);
+            type: "post",
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    }
 
     $(document).ready(function() {
       console.log('ready');
@@ -53,7 +56,7 @@
             type: "post",
             success: function(data) {
                 data = JSON.parse(data.substring(7,data.length-1).split("=>").join(":"));
-                console.log(data);
+                //console.log(data);
                 var myText = "";
                 var index, len;
                 myText += "<table><tc>"
@@ -76,6 +79,16 @@
                         //+ '<br><br>';
                 }
                 $("#rep_contact").html(myText);
+                
+                var issues = ["Abortion", "Budget_+_Economy", "Civil_Rights",
+                               "Corporations", "Crime", "Drugs",
+                               "Education", "Energy_+_Oil", "Environment",
+                               "Families_+_Children", "Families_+_Children", "Foreign_Policy",
+                               "Free_Trade", "Government_Reform", "Gun_Control",
+                               "Health_Care", "Homeland_Security", "Immigration",
+                               "Jobs", "Principles_+_Values", "Social_Security",
+                               "Tax_Reform", "Technology", "War_+_Peace", "Welfare_+_Poverty"];
+                
             }
           });
       });
