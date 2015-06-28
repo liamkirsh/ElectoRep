@@ -58,7 +58,13 @@
                 var index, len;
                 myText += "<table><tc>"
                 for (index = 0, len = data["officials"].length; index < len; ++index) {
-                    myText += "<th>" + data["officials"][index]["name"] + '<br>'
+                    if (index == 0) {
+                        myText += "<th>Senator<br>";
+                    }
+                    else {
+                        myText += "<th>Congressperson<br>";
+                    }
+                    myText += data["officials"][index]["name"] + '<br>'
                         + data["officials"][index]["address"][0]["line1"].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '<br>' // http://stackoverflow.com/a/196991
                         + data["officials"][index]["address"][0]["city"].charAt(0).toUpperCase()
                         + data["officials"][index]["address"][0]["city"].slice(1) + ", "
