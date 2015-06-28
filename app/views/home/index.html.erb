@@ -16,16 +16,28 @@
   <input id="addr_submit" type="submit" value="Submit"><!-- onclick="addr_clicked()">-->
   
   <div id="rep_contact"></div>
+  <div id="stances"></div>
 
   <script type="text/javascript">
     
-    /*function get_reps() {
-        console.log("here are your reps");
-        ($.ajax({
-            url: "/GetReps",
-            type: "get"
-        $('#rep_contact").text)
-    }*/
+    function get_stances(name, issue, type) {
+        //console.log('getting stances');
+
+
+        $.ajax({
+            url: "/GetStance/?rep=" + name + "&issue=" + issue + "&type=" + type,
+            type: "post",
+            success: function(data) {
+                data = data.substring(15, data.length-6);
+                console.log(data);
+                $("#stances").append(data + '<br><br>');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+    }
 
     $(document).ready(function() {
       console.log('ready');
@@ -50,7 +62,7 @@
                 var index, len;
                 myText += "<table><tc>"
                 for (index = 0, len = data["officials"].length; index < len; ++index) {
-                    if (index == 0) {
+                    if (index < 2) {
                         myText += "<th>Senator<br>";
                     }
                     else {
@@ -68,9 +80,18 @@
                         //+ '<br><br>';
                 }
                 $("#rep_contact").html(myText);
+                
+                for (index = 0; index < len; ++index) {
+                    if (index < 2) {
+                        get_stances(data["officials"][index]["name"], "Abortion", "Senate");
+                    } else {
+                        get_stances(data["officials"][index]["name"], "Abortion", data["normalizedInput"]["state"]);
+                    }
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
+                console.log(errorThrown);
             }
           });
       });

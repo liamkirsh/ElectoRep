@@ -4,10 +4,18 @@ class AddrController < ApplicationController
 	def submit
 		puts params[:address]
         address = params[:address]
-        url = "https://www.googleapis.com/civicinfo/v2/representatives?address=" + address + "&includeOffices=true&levels=country&roles=legislatorLowerBody&roles=legislatorUpperBody&fields=normalizedInput%2Cofficials&key=" + ENV["google_dev_key"]
-        url = url.gsub(' ', '+')
-        doc = Nokogiri::HTML(open(url))
-        json = JSON.parse(doc)
+        url1 = "https://www.googleapis.com/civicinfo/v2/representatives?address="\
+            + address + "&includeOffices=true&levels=country&roles=legislatorLowerBody&fields=normalizedInput%2Cofficials&key=" + ENV["google_dev_key"]
+        url1 = url1.gsub(' ', '+')
+        url2 = "https://www.googleapis.com/civicinfo/v2/representatives?address="\
+            + address + "&includeOffices=true&levels=country&roles=legislatorUpperBody&fields=normalizedInput%2Cofficials&key=" + ENV["google_dev_key"]
+        url2 = url2.gsub(' ', '+')
+        lower = Nokogiri::HTML(open(url1))
+        lower = JSON.parse(lower)
+        upper = Nokogiri::HTML(open(url2))
+        upper = JSON.parse(upper)
+        puts lower
+        upper["officials"] << lower["officials"][0]
         'json["officials"].each do |official|
             print official["name"] + "\n"
             print official["address"][0]["line1"] + "\n"
@@ -19,6 +27,6 @@ class AddrController < ApplicationController
             print "\n\n"
         end'
         
-        render :text => {:msg => json}
+        render :text => {:msg => upper}
 	end
 end
