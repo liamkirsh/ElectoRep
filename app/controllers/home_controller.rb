@@ -4,5 +4,5 @@ class HomeController < ApplicationController
       def addressEnter
 
       end
-   end
+    end
 end
