@@ -4,3 +4,14 @@
 <title>RandTech Hackathon</title>
 </head>
 <body>
+<%= form_for :"Address" do |f| %>
+  <p>
+    <%= f.label :"Enter Address:" %><br>
+    <%= f.text_field :address %>
+  </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+</body>
