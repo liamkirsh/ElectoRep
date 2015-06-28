@@ -26,20 +26,51 @@
   <div id="rep_contact"></div>
 
   <script type="text/javascript">
-    function addr_clicked() {
-      console.log($('#address')[0].value);
-    }
+    
+    /*function get_reps() {
+        console.log("here are your reps");
+        ($.ajax({
+            url: "/GetReps",
+            type: "get"
+        $('#rep_contact").text)
+    }*/
 
     $(document).ready(function() {
       console.log('ready');
+      $("#address").keypress(function(e) {
+        if (e.which == 13 || e.which == 10) {
+            $("#addr_submit").focus().click();
+            return false;
+        }
+      });
+      
       $("#addr_submit").click(function(event) {
-        console.log('line 34');
           event.preventDefault();
           var addr = $('#address')[0].value;
           console.log('got var ' + addr);
           $.ajax({
             url: "/AddrSubmit/?address=" + addr,
-            type: "post"
+            type: "post",
+            success: function(data) {
+                data = JSON.parse(data.substring(7,data.length-1).split("=>").join(":"));
+                console.log(data);
+                var myText = "";
+                var index, len;
+                myText += "<table><tc>"
+                for (index = 0, len = data["officials"].length; index < len; ++index) {
+                    myText += "<th>" + data["officials"][index]["name"] + '<br>'
+                        + data["officials"][index]["address"][0]["line1"].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '<br>' // http://stackoverflow.com/a/196991
+                        + data["officials"][index]["address"][0]["city"].charAt(0).toUpperCase()
+                        + data["officials"][index]["address"][0]["city"].slice(1) + ", "
+                        + data["officials"][index]["address"][0]["state"] + " "
+                        + data["officials"][index]["address"][0]["zip"] + '<br>'
+                        + data["officials"][index]["phones"][0] + '<br>'
+                        + '<img src="' + data["officials"][index]["photoUrl"] + '" height=200>'
+                        + "</tc>";
+                        //+ '<br><br>';
+                }
+                $("#rep_contact").html(myText);
+            }
           });
       });
     });
