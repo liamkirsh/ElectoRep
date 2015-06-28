@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xml:fb = "http://www.facebook.com/2008/fbml">
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+		<title>RandTech Hackathon</title>
+
+    <link href="Main.css" rel="stylesheet">
+	</head>
+
+<body>
+
+
+ <!-- action="action_page.php">-->
+  Address:<br>
+  <input id="address" type="text" name="Address" value="">
+  <br>
+  <input id="addr_submit" type="submit" value="Submit"><!-- onclick="addr_clicked()">-->
+  
+  <div id="rep_contact"></div>
+
+  <script type="text/javascript">
+    
+    /*function get_reps() {
+        console.log("here are your reps");
+        ($.ajax({
+            url: "/GetReps",
+            type: "get"
+        $('#rep_contact").text)
+    }*/
+
+    $(document).ready(function() {
+      console.log('ready');
+      $("#address").keypress(function(e) {
+        if (e.which == 13 || e.which == 10) {
+            $("#addr_submit").focus().click();
+            return false;
+        }
+      });
+      
+      $("#addr_submit").click(function(event) {
+          event.preventDefault();
+          var addr = $('#address')[0].value;
+          console.log('got var ' + addr);
+          $.ajax({
+            url: "/AddrSubmit/?address=" + addr,
+            type: "post",
+            success: function(data) {
+                data = JSON.parse(data.substring(7,data.length-1).split("=>").join(":"));
+                console.log(data);
+                var myText = "";
+                var index, len;
+                myText += "<table><tc>"
+                for (index = 0, len = data["officials"].length; index < len; ++index) {
+                    if (index == 0) {
+                        myText += "<th>Senator<br>";
+                    }
+                    else {
+                        myText += "<th>Congressperson<br>";
+                    }
+                    myText += data["officials"][index]["name"] + '<br>'
+                        + data["officials"][index]["address"][0]["line1"].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '<br>' // http://stackoverflow.com/a/196991
+                        + data["officials"][index]["address"][0]["city"].charAt(0).toUpperCase()
+                        + data["officials"][index]["address"][0]["city"].slice(1) + ", "
+                        + data["officials"][index]["address"][0]["state"] + " "
+                        + data["officials"][index]["address"][0]["zip"] + '<br>'
+                        + data["officials"][index]["phones"][0] + '<br>'
+                        + '<img src="' + data["officials"][index]["photoUrl"] + '" height=200>'
+                        + "</tc>";
+                        //+ '<br><br>';
+                }
+                $("#rep_contact").html(myText);
+            }
+          });
+      });
+    });
+
+
+</script>
+
+</body>
