@@ -52,6 +52,7 @@
           event.preventDefault();
           var addr = $('#address')[0].value;
           console.log('got var ' + addr);
+          $("#stances").html("");
           $.ajax({
             url: "/AddrSubmit/?address=" + addr,
             type: "post",
@@ -81,11 +82,21 @@
                 }
                 $("#rep_contact").html(myText);
                 
+                var issues = ["Abortion", "Budget_+_Economy", "Civil_Rights",
+                               "Corporations", "Crime", "Drugs",
+                               "Education", "Energy_+_Oil", "Environment",
+                               "Families_+_Children", "Families_+_Children", "Foreign_Policy",
+                               "Free_Trade", "Government_Reform", "Gun_Control",
+                               "Health_Care", "Homeland_Security", "Immigration",
+                               "Jobs", "Principles_+_Values", "Social_Security",
+                               "Tax_Reform", "Technology", "War_+_Peace", "Welfare_+_Poverty"];
+                var issue = 14;
+                $("#stances").append(issues[issue] + "<br><br>");
                 for (index = 0; index < len; ++index) {
                     if (index < 2) {
-                        get_stances(data["officials"][index]["name"], "Abortion", "Senate");
+                        get_stances(data["officials"][index]["name"], issues[issue], "Senate");
                     } else {
-                        get_stances(data["officials"][index]["name"], "Abortion", data["normalizedInput"]["state"]);
+                        get_stances(data["officials"][index]["name"], issues[issue], data["normalizedInput"]["state"]);
                     }
                 }
             },
